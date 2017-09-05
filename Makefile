@@ -2,6 +2,7 @@ AWS_REGION := ap-northeast-1
 AWS_PROFILE := localstack
 AWS_LAMBDA_ENDPOINT_URL := http://localhost:4574
 AWS_LAMBDA_RUNTIME := python2.7
+AWS_LAMBDA_RESULT := result.log
 
 .PHONY: help configure lambda/*
 .DEFAULT_GOAL: help
@@ -26,9 +27,16 @@ lambda/create: ## create lambda function FUNCTION_NAME=f1 ROLE=r1 HANDLER=sample
 
 lambda/run: FUNCTION_NAME = f1
 lambda/run: PAYLOAD = '{"key1":"value1", "key2":"value2", "key3":"value3"}'
-lambda/run: OUTPUT_FILE = result.log
-lambda/run: ## run lambda function FUNCTION_NAME=f1 PAYLOAD='{"key1":"value1", "key2":"value2", "key3":"value3"}' OUTPUT_FILE=result.log
-	aws  --endpoint-url=${AWS_LAMBDA_ENDPOINT_URL} --region ${AWS_REGION} --profile ${AWS_PROFILE} lambda invoke --function-name ${FUNCTION_NAME} --payload ${PAYLOAD} ${OUTPUT_FILE}
+lambda/run: ## run lambda function FUNCTION_NAME=f1 PAYLOAD='{"key1":"value1", "key2":"value2", "key3":"value3"}'
+	aws  --endpoint-url=${AWS_LAMBDA_ENDPOINT_URL} --region ${AWS_REGION} --profile ${AWS_PROFILE} lambda invoke --function-name ${FUNCTION_NAME} --payload ${PAYLOAD} ${AWS_LAMBDA_RESULT}
+
+lambda/delete: FUNCTION_NAME = f1
+lambda/delete: ## delete lambda function FUNCTION_NAME=f1
+	aws --endpoint-url=${AWS_LAMBDA_ENDPOINT_URL} --region ${AWS_REGION} --profile ${AWS_PROFILE} lambda delete-function --function-name=${FUNCTION_NAME}
+
+lambda/recreate: lambda/delete lambda/prepare lambda/create ## recreate lambda function
 
 test: ## run test using localstack
 	python lambda_test.py
+	make lambda/recreate
+	make lambda/run && grep "Hello from Lambda" ${AWS_LAMBDA_RESULT}
