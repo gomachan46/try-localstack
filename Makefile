@@ -1,7 +1,7 @@
 AWS_REGION := ap-northeast-1
 AWS_PROFILE := localstack
 AWS_LAMBDA_ENDPOINT_URL := http://localhost:4574
-AWS_LAMBDA_RUNTIME := python2.7
+AWS_LAMBDA_RUNTIME := python2.7 # python2.7 only so far...
 AWS_LAMBDA_RESULT := result.log
 
 .PHONY: help configure lambda/*
@@ -34,7 +34,10 @@ lambda/delete: FUNCTION_NAME = f1
 lambda/delete: ## delete lambda function FUNCTION_NAME=f1
 	aws --endpoint-url=${AWS_LAMBDA_ENDPOINT_URL} --region ${AWS_REGION} --profile ${AWS_PROFILE} lambda delete-function --function-name=${FUNCTION_NAME}
 
-lambda/recreate: lambda/delete lambda/prepare lambda/create ## recreate lambda function
+lambda/recreate: ## recreate lambda function
+	make lambda/prepare
+	make lambda/delete || echo "lambda function not found"
+	make lambda/create
 
 test: ## run test using localstack
 	python lambda_test.py
