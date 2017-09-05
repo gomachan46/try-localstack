@@ -12,16 +12,16 @@ help: ## show this
 configure: ## set up aws configure (profile named `localstack`)
 	aws configure --profile localstack
 
-lambda/prepare: INPUT_FILES = lambda.py
-lambda/prepare: ZIP_FILE = lambda.zip
-lambda/prepare: ## zip lambda functions ZIP_FILE=lambda.zip INPUT_FILES=lambda.py
+lambda/prepare: INPUT_FILES = sample.py
+lambda/prepare: ZIP_FILE = sample.zip
+lambda/prepare: ## zip lambda functions ZIP_FILE=sample.zip INPUT_FILES=sample.py
 	zip ${ZIP_FILE} ${INPUT_FILES}
 
-lambda/create: FUNCTION_NAME = f
+lambda/create: FUNCTION_NAME = f1
 lambda/create: ROLE = r1
-lambda/create: HANDLER = lambda.lambda_handler
-lambda/create: ZIP_FILE = fileb://lambda.zip
-lambda/create: ## create lambda function FUNCTION_NAME=f1 ROLE=r1 HANDLER=lambda.lambda_handler ZIP_FILE=fileb://lambda.zip
+lambda/create: HANDLER = sample.lambda_handler
+lambda/create: ZIP_FILE = fileb://sample.zip
+lambda/create: ## create lambda function FUNCTION_NAME=f1 ROLE=r1 HANDLER=sample.lambda_handler ZIP_FILE=fileb://sample.zip
 	aws --endpoint-url=${AWS_LAMBDA_ENDPOINT_URL} --region ${AWS_REGION} --profile ${AWS_PROFILE} lambda create-function --function-name=${FUNCTION_NAME} --runtime=${AWS_LAMBDA_RUNTIME} --role=${ROLE} --handler=${HANDLER} --zip-file ${ZIP_FILE}
 
 lambda/run: FUNCTION_NAME = f1
