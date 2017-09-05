@@ -1,9 +1,11 @@
 import unittest
-from sample import lambda_handler
+from sample import hello
 
-class TestLambda(unittest.TestCase):
-    def test_lambda(self):
-        self.assertEqual(1, 1)
+class TestHello(unittest.TestCase):
+    def test_hello(self):
+        expected = 'Hello from Lambda'
+        actual = hello()
+        self.assertEqual(expected, actual)
 
 if __name__ == "__main__":
     unittest.main()

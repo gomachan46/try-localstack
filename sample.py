@@ -1,3 +1,5 @@
 def lambda_handler(event, context):
-    print(event)
+    hello
+
+def hello():
     return 'Hello from Lambda'
