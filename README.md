@@ -3,6 +3,9 @@
 ## requirements
 
 * awscli
+  * https://aws.amazon.com/jp/cli/
+* localstack
+  * https://github.com/localstack/localstack
 
 ## set up configure
 
