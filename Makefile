@@ -29,3 +29,6 @@ lambda/run: PAYLOAD = '{"key1":"value1", "key2":"value2", "key3":"value3"}'
 lambda/run: OUTPUT_FILE = result.log
 lambda/run: ## run lambda function FUNCTION_NAME=f1 PAYLOAD='{"key1":"value1", "key2":"value2", "key3":"value3"}' OUTPUT_FILE=result.log
 	aws  --endpoint-url=${AWS_LAMBDA_ENDPOINT_URL} --region ${AWS_REGION} --profile ${AWS_PROFILE} lambda invoke --function-name ${FUNCTION_NAME} --payload ${PAYLOAD} ${OUTPUT_FILE}
+
+test: ## unittest using localstack
+	python lambda_test.py
