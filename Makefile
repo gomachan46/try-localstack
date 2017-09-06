@@ -46,9 +46,7 @@ test: ## run test using localstack
 
 localstack:
 	test `ls localstack` || git clone https://github.com/localstack/localstack.git
-	pwd
-	cd localstack && python localstack/services/install.py libs
-	cd localstack && make infra
+	cd localstack && make reinstall-p3 && make init && make infra
 
 awscli:
 	test `which aws` || pip install awscli
