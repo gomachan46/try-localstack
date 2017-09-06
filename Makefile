@@ -45,7 +45,7 @@ test: ## run test using localstack
 	make lambda/run && grep "Hello from Lambda" ${AWS_LAMBDA_RESULT}
 
 localstack:
-	test `cd localstack` || git clone git@github.com:localstack/localstack.git
+	test `cd localstack` || git clone https://github.com/localstack/localstack.git
 	cd localstack
 	python localstack/services/install.py libs
 	make infra
