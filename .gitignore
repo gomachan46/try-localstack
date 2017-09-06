@@ -1,5 +1,6 @@
 *.zip
 result.log
+localstack/
 
 # Python.gitignore
 

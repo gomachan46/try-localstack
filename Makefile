@@ -43,3 +43,12 @@ test: ## run test using localstack
 	python lambda_test.py
 	make lambda/recreate
 	make lambda/run && grep "Hello from Lambda" ${AWS_LAMBDA_RESULT}
+
+localstack:
+	test `cd localstack` || git clone git@github.com:localstack/localstack.git
+	cd localstack
+	python localstack/services/install.py libs
+	make infra
+
+awscli:
+	test `which aws` || pip install awscli
